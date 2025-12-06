@@ -78,8 +78,7 @@ def main():
     for center in centroids:
         for cr in center[:-1]:
             print(str(round(cr,4))+",",end="")
-        print(str(round(center[-1],4)),end="")
-        print()
+        print(str(round(center[-1],4)))
 
 if __name__ == "__main__":
     main()
