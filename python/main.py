@@ -4,18 +4,12 @@ Main Python Program Skeleton
 """
 import math
 import sys
-import os
 from typing import List
 
 
-def delta(point_1: List["float"], point_2: List["float"]):
-    return math.sqrt(sum([(x-y)**2 for x,y in zip(point_1,point_2)]))
 
-
-def kmeans(data_points: List[List["float"]], k:int, iters: int = 400, eps: float = 0.001):
-    if not (1 <= k <= len(data_points)):
-        raise ValueError("Unexpected k value")
-
+def kmeans(data_points: List[List["float"]], k:int, iters: int = 400, eps: float = 0.001) -> list:
+    
     # initialize centers as copies of first k points
     centers = [dp[:] for dp in data_points[:k]]
 
@@ -23,7 +17,7 @@ def kmeans(data_points: List[List["float"]], k:int, iters: int = 400, eps: float
         # assign points to nearest center
         clusters = {i: [] for i in range(k)}
         for point in data_points:
-            min_idx = min(range(k), key=lambda i: delta(point, centers[i]))
+            min_idx = min(range(k), key=lambda i: math.dist(point, centers[i]))
             clusters[min_idx].append(point)
 
         # compute new centers, handle empty clusters by keeping old center
@@ -38,7 +32,7 @@ def kmeans(data_points: List[List["float"]], k:int, iters: int = 400, eps: float
                 new_centers.append(mean)
 
         # check convergence (max movement)
-        max_move = max(delta(a, b) for a, b in zip(centers, new_centers))
+        max_move = max(math.dist(a, b) for a, b in zip(centers, new_centers))
         centers = [c[:] for c in new_centers]
         if max_move < eps:
             return centers
@@ -55,8 +49,8 @@ def main():
 
     for line in sys.stdin:
         data_points.append([float(cr) for cr in line.split(",")])
-
         k = 0
+    
     iters = 400
     if len(sys.argv) == 1:
         print("An Error Has Occurred")
